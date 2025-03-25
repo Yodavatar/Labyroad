@@ -1,5 +1,1 @@
-Labyroad is a simply game in python.
-The library used are pygame,os,random,math.
-Labyroad is a 2d game in which you must escape
-to a random labyrinth. Don't waste your time 
-to escape before time runs out.
+Labyroad is a simply game in python. The library used are pygame,os,random,math. Labyroad is a 2d game in which you must escape to a random labyrinth. Don't waste your time to escape before time runs out.
