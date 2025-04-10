@@ -7,33 +7,32 @@ import random
 
 class Case():
     def __init__(self) -> None:
-        """Case simple possedant 4 murs pleins"""
+        """The case have 4 walls"""
         self.liste = [1,1,1,1]
 
     def change_value(self,direction=int,value=bool) -> None:
-        """Fonction permettant de changer de valeur un mur de la case"""
+        """Function for change the value of the wall of the case"""
         if value:
             self.liste[direction] = 1
         else:
             self.liste[direction] = 0
 
     def nbr_wall(self) -> int:
-        """Renvoie le nombre de mur d'une case"""
+        """Return the number of walls"""
         return(self.liste[0]+self.liste[1]+self.liste[2]+self.liste[3])
 
     def values(self) -> list:
-        """Renvoie les valeurs des 4 murs dans une liste"""
+        """Return the values of the four walls"""
         return([self.liste[0],self.liste[1],self.liste[2],self.liste[3]])
 
     def __str__(self) -> str:
-        """Renvoie les valeurs des 4 murs dans une chaine de caractère"""
+        """Return the values of the four walls in a character string"""
         return(str(self.liste[0])+str(self.liste[1])+str(self.liste[2])+str(self.liste[3]))
 
 class Labyrinthe():
     def __init__(self,x,y) -> None:
-        """Creation d'un labyrinthe de longueur x et largeur y
-        le labyrinthe est constitué de x*y case de la class Case()"""
-        assert x < 1000 and y < 1000,"X et Y sont trop grand"
+        """Create a labyrinth of x size and y size."""
+        assert x < 1000 and y < 1000,"X and Y are so big"
         self.x = x-1
         self.y = y-1
 
@@ -46,32 +45,30 @@ class Labyrinthe():
                 self.laby[i][j] = Case()
 
     def recup_val(self,x,y) -> int:
-        """Recupere les valeurs d'une case du labyrinthe"""
+        """Get the values of the case of the labyrinth"""
         return(self.laby[y][x].values())
 
     def bordure_laby(self,x:int,y:int) -> list:
-        """Renvoie une liste de direction, si
-        la case touche une bordure du labyrinthe"""
+        """Return a list of direction if the case touch a border of the labyrinth"""
         impossible = []
-        if x == 0: #Touche à gauche
+        if x == 0: #Left
             impossible.append(3)
-        if y == 0: #Touche en haut
+        if y == 0: #Up
             impossible.append(0)
-        if x == self.x: #Touche à droite
+        if x == self.x: #Right
             impossible.append(1)
-        if y == self.y: #Touche en bas
+        if y == self.y: #Down
             impossible.append(2)
         return impossible
 
     def case_ouverte(self,x:int,y:int) -> bool:
-        """Renvoie si la case est ouverte ou non"""
+        """Return if the case is open or not"""
         if 0 in self.laby[y][x].values():
             return True
         return False
 
     def mur_adjacent(self,x:int,y:int) -> list:
-        """Renvoie une liste de direction, si
-        les murs autours de la case en question existent"""
+        """Return a list of directions if the walls around the case exist"""
         possible = [0,1,2,3]
         murs = []
         for i in self.bordure_laby(x,y):
@@ -88,8 +85,7 @@ class Labyrinthe():
         return murs
 
     def passage_adjacent(self,x:int,y:int) -> list:
-        """Renvoie une liste de direction, s'il existe un
-        passage autours de la case en question"""
+        """Return a liste of direction if a passage arroud the case exist"""
         possible = [0,1,2,3]
         passage = []
         for i in self.bordure_laby(x,y):
@@ -106,9 +102,8 @@ class Labyrinthe():
         return passage
 
     def retire_mur(self,x:int,y:int,direction:int) -> None:
-        """Retire un mur à partir des coordonnées"""
+        """Del a wall of a case"""
         self.laby[y][x].change_value(direction,False)
-        #nord,est,sud,ouest
         if direction == 0:
             self.laby[y-1][x].change_value(2,False)
         elif direction == 1:
@@ -119,7 +114,7 @@ class Labyrinthe():
             self.laby[y][x-1].change_value(1,False)
 
     def ajoute_mur(self,x:int,y:int,direction:int) -> None:
-        """Ajoute un mur à partir des coordonnées"""
+        """Add a wall of a case"""
         self.laby[y][x].change_value(direction,True)
         #nord,est,sud,ouest
         if direction == 0:
@@ -132,9 +127,8 @@ class Labyrinthe():
             self.laby[y][x-1].change_value(1,True)
 
     def retire_mur_aleatoire(self,x:int,y:int) -> int:
-        """Retire un mur aleatoirement de la case en question
-        qui donne accès à une case non ouverte et renvoie sa direction,
-        si aucun mur ne peut etre enlevé, on renvoie None"""
+        """Del a wall of a random case linked to a other case has not been opened
+        and return his direction, if no wall can be removed, return None"""
         liste = self.mur_adjacent(x,y)
         if len(liste) == 0:
             return None
@@ -153,7 +147,7 @@ class Labyrinthe():
             return 3
 
     def __str__(self) -> str:
-        """Renvoie le labyrinthe sous forme de texte"""
+        """Return the labyrinth in text"""
         n = []
         e = []
         s = []
@@ -165,15 +159,15 @@ class Labyrinthe():
                 s.append(str(j)[2])
                 o.append(str(j)[3])
         all = " "
-        for i in range(self.x+1):#première ligne
+        for i in range(self.x+1):#first line
             if n[i] == "1":
                 all += "+-"
             else:
                 all += "+ "
         all += "+\n"
         demi = " "
-        for i in range((self.y+1)*(self.x+1)):#autres lignes
-            if i % (self.x+1) == 0:# 1ere case de chaque ligne
+        for i in range((self.y+1)*(self.x+1)):#others lines
+            if i % (self.x+1) == 0:# first case of each line
                 if o[i] == "1":
                     all += " |"
                 else:
@@ -187,27 +181,26 @@ class Labyrinthe():
                 demi += "+-"
             else:
                 demi += "+ "
-            if i % (self.x+1) == self.x:# derniere case de chaque ligne
+            if i % (self.x+1) == self.x:# last case of each line
                 all += "\n"+demi+"+\n"
                 demi = " "
         return all
 
 def parfait(laby:Labyrinthe):
-    """Transforme le labyrinthe pour qu'il devienne
-    parfait en utilisant une fontion récursive"""
+    """Transform the labyrinth for it become a perfect labyrinth in use a recursiv funtion"""
     recursif_parfait(random.randint(0,laby.x),random.randint(0,laby.y),laby,[])
 
 def recursif_parfait(x:int,y:int,laby,visite) -> None:
-    """-si la case considérée est déja visitée, on ne fait rien
-    -sinon on la note comme visitée et on appelle récursivement
-    sur chacun de ses voisins non visités après avoir ouvert le mur avec le voisin"""
+    """-if the case is visited, we do nothing
+    -else we note like visited and we call the function recursively on each
+    of his neighbors not visited after removing the wall with the neighbor"""
     if ((laby.x+1)*(laby.y+1)) != len(visite):
         if [x,y] not in visite:
-            visite.append([x,y])#on bloque la case pour ne pas revenir dessus
-            possible = laby.mur_adjacent(x,y)#on recupère les murs autours de la case
+            visite.append([x,y])
+            possible = laby.mur_adjacent(x,y)
             if len(possible) == 0:
                 return
-            mur_direction = laby.retire_mur_aleatoire(x,y)#on enlève un mur aléatoiremant de la case
+            mur_direction = laby.retire_mur_aleatoire(x,y)
             if 0 == mur_direction:
                 recursif_parfait(x,y-1,laby,visite)
             elif 1 == mur_direction:
@@ -233,14 +226,13 @@ def recursif_parfait(x:int,y:int,laby,visite) -> None:
                     recursif_parfait(x-1,y,laby,visite)
 
 def creer_sortie(laby:Labyrinthe) -> int:
-    """Cette fonction créer une sortie dans un coin aleatoirement
-    et renvoie la sortie"""
-    #0=Nord Ouest/1=Nord Est/2=Sud Est/3=Sud Ouest
+    """Create a output in a random corner and return his direction"""
+    """0=North West/1=North East/2=South East/3=South West"""
     nbr =(random.randint(0,3))
-    if nbr == 0:#0 = Nord Ouest
+    if nbr == 0:
         laby.laby[0][0].liste[3] = 0
         return(0)
-    if nbr == 1:#1 = Nord Est
+    if nbr == 1:
         laby.laby[0][laby.x].liste[0] = 0
         return(1)
     if nbr == 2:
@@ -251,10 +243,9 @@ def creer_sortie(laby:Labyrinthe) -> int:
         return(3)
 
 def trouver_sortie(laby:Labyrinthe,out=True) -> int:
-    """Renvoie la position de la sortie, (y,x)
-    "out" = True renvoie la position de la sortie
-    à l'exterieur du labyrinthe"""
-    #0=Nord Ouest/1=Nord Est/2=Sud Est/3=Sud Ouest
+    """Return the position of the outpout, (y,x)
+    "out" = True return the position of the output
+    to the out of the labyrinth"""
     if laby.laby[0][0].values()[3] == 0:
         if out:
             return (0,-1)
@@ -277,8 +268,8 @@ def trouver_sortie(laby:Labyrinthe,out=True) -> int:
             return(laby.y,0)
     return None
 
-def tuto()->Labyrinthe:
-    """Renvoie le labyrinthe du tuto"""
+def tuto()-> Labyrinthe:
+    """return the tutorial labyrinth"""
     laby = Labyrinthe(2,2)
     laby.retire_mur(0,0,2)
     laby.retire_mur(1,0,2)
@@ -287,7 +278,7 @@ def tuto()->Labyrinthe:
     return laby
 
 def pos_player(laby) -> tuple:
-    """renvoie la position du joueur au debut d'une manche"""
+    """return the position of the player of the begin of a round"""
     s = trouver_sortie(laby,out=False)
     if s == (0,0):#nord ouest
         return(int((laby.y+1)*9/10),int((laby.x+1)*9/10))
@@ -297,39 +288,6 @@ def pos_player(laby) -> tuple:
         return(0,0)
     elif s == (laby.y,0):#sud ouest
         return(0,int((laby.x+1)*9/10))
-
-def resolution(laby:Labyrinthe,objectif=(0,0)):
-    """Renvoie la liste des positions de la sortie jusqu'au joueur"""
-    ###NE FONCTIONNE PAS###
-    y,x = trouver_sortie(laby,out=False)
-    recursif_resolution(laby=laby,case=[y,x],objectif=objectif,chemin=[[y,x]])
-
-def recursif_resolution(laby:Labyrinthe,case,objectif,chemin=[]) ->list:
-    """fonction recursive qui renvoie le chemin"""
-    ###NE FONCTIONNE PAS###
-    path_next = chemin.copy()
-    possible = laby.passage_adjacent(case[0],case[1])
-    if case == objectif:
-        return chemin
-    print(case,path_next)
-    for i in possible:
-        if i == 0 and [case[0]-1,case[1]] not in chemin:
-            path = path_next.copy()
-            path.append([case[0]-1,case[1]])
-            return recursif_resolution(laby=laby,case=[case[0]-1,case[1]],objectif=objectif,chemin=path)
-        if i == 1 and [case[0],case[1]+1] not in chemin:
-            path = path_next.copy()
-            path.append([case[0],case[1]+1])
-            return recursif_resolution(laby=laby,case=[case[0],case[1]+1],objectif=objectif,chemin=path)
-        if i == 2 and [case[0]+1,case[1]] not in chemin:
-            path = path_next.copy()
-            path.append([case[0]+1,case[1]])
-            return recursif_resolution(laby=laby,case=[case[0]+1,case[1]],objectif=objectif,chemin=path)
-        if i == 3 and [case[0],case[1]-1] not in chemin:
-            path = path_next.copy()
-            path.append([case[0],case[1]-1])
-            return recursif_resolution(laby=laby,case=[case[0],case[1]-1],objectif=objectif,chemin=path)
-    return None
 
 #Coding : utf-8
 #Coding by Yodavatar

@@ -11,8 +11,8 @@ from affichage import*
 
 class Game():
     def __init__(self) -> None:
-        """Preparation du lancement du jeu en general"""
-        self.clock = pygame.time.Clock() # Temps de la boucle du jeu
+        """Load the game"""
+        self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
         self.data = Donnee(self.screen)
         self.data.recuperer()
@@ -22,25 +22,23 @@ class Game():
         self.page_end = End(self.screen,self.data)
 
     def go_to_home(self) -> None:
-        """lancement de la page d'accueil, recupere un nombre et le traite.
-        Lance le jeu si la reponse est 1 à 4 et le ferme si la reponse est 0
-        recupere egalement le skin choisit"""    
+        """begin the home page."""    
         home = Home(self.screen,self.song,self.data)
         self.choose_game,self.skin = home.run()
-        if self.choose_game == 0:#quitter
+        if self.choose_game == 0:#quit
             pygame.quit()
-        elif self.choose_game == 1:#facile
+        elif self.choose_game == 1:#easy
             self.charge_laby()
         elif self.choose_game == 2:#normal
             self.charge_laby()
-        elif self.choose_game == 3:#difficile
+        elif self.choose_game == 3:#difficult
             self.charge_laby()
         elif self.choose_game == 4:#tuto
             self.charge_laby()
 
     def charge_laby(self)-> None:
-        """Lance le jeu en prennant en compte le niveau souhaité"""
-        if self.choose_game == 4:#tuto #labyrinthe en noir
+        """begin the game"""
+        if self.choose_game == 4:#tutorial / black labyrinth
             self.screen.fill((248, 228, 255))
             self.laby = tuto()
             self.sortie = (2,0)
@@ -50,7 +48,7 @@ class Game():
             self.affichage = Affichage(self.screen,self.data,self.laby,self.time_end,30000,skin=self.skin,tuto=True,colors=[(155,155,155),(0,0,0)])
             self.run()
         
-        elif self.choose_game == 1:#facile #labyrinthe en blue
+        elif self.choose_game == 1:#easy / blue labyrinth
             self.screen.fill((248, 228, 255))
             self.laby = Labyrinthe(10,10)
             parfait(self.laby)
@@ -60,7 +58,7 @@ class Game():
             self.affichage = Affichage(self.screen,self.data,self.laby,self.time_end,50000,skin=self.skin,colors=[(89, 31, 206),(61, 189, 194)])
             self.run()
         
-        elif self.choose_game == 2:#normal #Labyrinthe en vert
+        elif self.choose_game == 2:#normal / green labyrinth
             self.screen.fill((248, 228, 255))
             self.laby = Labyrinthe(15,15)
             parfait(self.laby)
@@ -70,7 +68,7 @@ class Game():
             self.affichage = Affichage(self.screen,self.data,self.laby,self.time_end,55000,skin=self.skin,colors=[(27, 65, 8),(196, 232, 178)])
             self.run()
 
-        elif self.choose_game == 3:#difficile #labyrinthe en rouge
+        elif self.choose_game == 3:#difficult / red labyrinth
             self.screen.fill((248, 228, 255))
             self.laby = Labyrinthe(20,20)
             parfait(self.laby)
@@ -81,7 +79,7 @@ class Game():
             self.run()
     
     def end(self,result) -> None:
-        """message une fois que le jeu est finit"""
+        """message if the game is over"""
         if not pygame.mouse.get_visible():
             pygame.mouse.set_visible(True)
         if result:
@@ -106,7 +104,7 @@ class Game():
         self.running = False
 
     def run(self) -> None:
-        """boucle du jeu"""
+        """loop of the game"""
         self.running = True
         self.affichage.update()
         if pygame.mouse.get_visible():
@@ -116,7 +114,7 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:#touche entrer
+                    if event.key == pygame.K_ESCAPE:
                         self.running = False
                     elif event.key == pygame.K_UP:
                         if self.affichage.deplacement(0) == True:
@@ -133,8 +131,8 @@ class Game():
             
             if self.running:
                 self.clock.tick(10)  # limits FPS
-                pygame.display.flip() #mettre a jour pygame
-                if self.affichage.time():#renvoie si le temps est finit
+                pygame.display.flip() #update of pygame
+                if self.affichage.time():
                     self.end(False)
             
         
@@ -145,17 +143,17 @@ class Game():
 
 class End():
     def __init__(self,screen,data) -> None:
-        """Preparation de l'état"""
+        """Init"""
         self.continu = True
         self.screen = screen
         self.data = data
 
         self.ecart = self.screen.get_width()/200
-        #bloc non clicable
+        #buttons non clickable
         self.bloc_fond = [self.screen.get_width()*1/3/2,self.screen.get_height()*1/3/2,self.screen.get_width()*2/3,self.screen.get_height()*2/3]
         self.bloc_principale = [self.screen.get_width()*1/3/2+self.ecart,self.screen.get_height()*1/3/2+self.ecart,self.screen.get_width()*2/3-2*self.ecart,self.screen.get_height()*2/3-2*self.ecart]
 
-        #bloc clicable
+        #buttons clickable
         self.rect_continu = [self.screen.get_width()*1/3/2+self.screen.get_width()*2/3/9,self.screen.get_height()*2/3,self.screen.get_width()*2/3/3,self.screen.get_height()/8]
         self.rect_quit = [self.screen.get_width()*1/3/2+self.screen.get_width()*2/3/9*2+self.screen.get_width()*2/3/3,self.screen.get_height()*2/3,self.screen.get_width()*2/3/3,self.screen.get_height()/8]
 
@@ -164,19 +162,19 @@ class End():
         self.color_blue = (97, 103, 122)
         self.color_white = (240, 232, 242)
 
-        #police d'ecriture
+        #Font
         self.font = pygame.font.Font("assets/font/dialog_font.ttf",int(self.data.taille_text*1.25))
 
-        #ecriture
-        self.render_continu = self.font.render("Continuer",False,self.color_blue)
-        self.render_quit = self.font.render("Quitter",False,self.color_blue)
+        #Write the text
+        self.render_continu = self.font.render("Continue",False,self.color_blue)
+        self.render_quit = self.font.render("Quit",False,self.color_blue)
 
     def charge_phrase(self) -> None:
-        """Charge les phrase selon si le joueur gagné ou pas avec son level"""
+        """Load the sentence"""
         if self.result:
-            self.render1 = self.font.render("Vous avez gagné",False,(0,0,0))
+            self.render1 = self.font.render("You have win !",False,(0,0,0))
         else:
-            self.render1 = self.font.render("Vous avez perdu",False,(0,0,0))
+            self.render1 = self.font.render("You have lose !",False,(0,0,0))
         if self.level == 1:
             p = self.data.victoire_easy/(self.data.victoire_easy+self.data.defaite_easy)
         elif self.level == 2:
@@ -187,18 +185,18 @@ class End():
         self.render2 = self.font.render("Pourcentage de victoire : "+p+"%.",False,(0,0,0))
 
     def button(self,bloc) -> None:
-        """affiche le bouton"""
+        """Show the button"""
         if self.souris_on_button(bloc):
             pygame.draw.rect(self.screen,self.color_blue,bloc)
         else:
             pygame.draw.rect(self.screen,self.color_black,bloc)
 
     def souris_on_button(self,bloc):
-        """Verifie si la souris se trouve sur le boutton"""
+        """Check if the mouse is on the button"""
         return bloc[0]<pygame.mouse.get_pos()[0]<bloc[0]+bloc[2] and bloc[1]<pygame.mouse.get_pos()[1]<bloc[1]+bloc[3]
 
     def run(self,level,result):
-        """Renvoie True si le joueur veut continuer le jeu"""
+        """return True if the player want to continue the game"""
         self.running = True
         self.level = level
         self.result = result
@@ -210,7 +208,7 @@ class End():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:#touche entrer
+                    if event.key == pygame.K_ESCAPE:
                         self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         if self.souris_on_button(self.rect_continu):
@@ -226,19 +224,19 @@ class End():
                 self.button(self.rect_continu)
                 self.button(self.rect_quit)
 
-                """ecritures"""
+                """writing"""
                 self.screen.blit(self.render1,(self.screen.get_width()*1/3/2+self.screen.get_width()/200,self.screen.get_height()*1/3/2))
                 self.screen.blit(self.render2,(self.screen.get_width()*1/3/2+self.screen.get_width()/200,self.screen.get_height()*1/3/2+self.screen.get_height()/10))
                 
                 self.screen.blit(self.render_continu,(self.rect_continu[0],self.rect_continu[1]))
                 self.screen.blit(self.render_quit,(self.rect_quit[0],self.rect_quit[1]))
                 
-                pygame.display.flip() #mettre a jour pygame
+                pygame.display.flip() #Update of pygame
         return self.continu
 
 class Home():
     def __init__(self,screen,song,data) -> None:
-        """page d'accueil du jeu"""
+        """page of the game"""
         self.screen = screen
         self.song = song
         self.data = data
@@ -246,11 +244,10 @@ class Home():
         self.running = True
         self.font_grand = pygame.font.Font("assets/font/dialog_font.ttf",int(self.data.taille_text*1.5))
         self.font_moyen = pygame.font.Font("assets/font/dialog_font.ttf",int(self.data.taille_text*1.25))
-        #self.font_moyen = pygame.font.Font("assets/font/dialog_font.ttf",self.data.moyen_text)
-        self.welcome = self.font_grand.render("Bienvenue sur LabyRoad",False,(255, 246, 224))
+        self.welcome = self.font_grand.render("Welcome on LabyRoad",False,(255, 246, 224))
         self.num_skin = 1
 
-        """couleurs de l'interface"""
+        """Color of the UI"""
         self.color_black = (39, 40, 41)
         self.color_blue = (97, 103, 122)
         self.color_grey = (216, 217, 218)
@@ -266,7 +263,7 @@ class Home():
         self.ecart_height = int(self.screen.get_height()*4/5*2/6/5)
         self.bloc_height = int(self.screen.get_height()*4/5/6)
 
-        """blocs cliquable"""
+        """Buttons clickable"""
         self.rect_facile = [self.ecart_width,self.ecart_height+self.screen.get_height()/5,self.bloc_width,self.bloc_height]
         self.rect_normal = [self.ecart_width,self.bloc_height+self.ecart_height*2+self.screen.get_height()/5,self.bloc_width,self.bloc_height]
         self.rect_difficile = [self.ecart_width,self.bloc_height*2+self.ecart_height*3+self.screen.get_height()/5,self.bloc_width,self.bloc_height]
@@ -274,37 +271,36 @@ class Home():
         self.rect_skin = [self.ecart_width*2+self.bloc_width/2-self.ecart_width/2,self.bloc_height*3+self.ecart_height*4+self.screen.get_height()/5,self.bloc_width/2-self.ecart_width/2,self.bloc_height]
         self.rect_quit = [int(self.screen.get_width()*9.5/10),0,int(self.screen.get_width()*0.5/10),int(self.screen.get_width()*0.5/10)]
 
-        """rendu ecriture"""
-        self.render_facile = self.font_grand.render("Facile",False,(121, 226, 224))
+        """Load the font"""
+        self.render_facile = self.font_grand.render("Easy",False,(121, 226, 224))
         self.render_normal = self.font_grand.render("Normal",False,(159, 234, 114))
-        self.render_difficile = self.font_grand.render("Difficile",False,(233, 66, 89))
+        self.render_difficile = self.font_grand.render("Difficult",False,(233, 66, 89))
         self.render_quit = self.font_moyen.render("X",False,self.color_white)
-        self.render_tuto = self.font_moyen.render("Tutoriel",False,(60, 65, 56))
+        self.render_tuto = self.font_moyen.render("Tutorial",False,(60, 65, 56))
         self.render_skin = self.font_moyen.render("Skin",False,(60, 65, 56))
 
-        """Chargement du skin"""
+        """Load the skin"""
         self.charge_skin()
 
     def button(self,bloc) -> None:
-        """affiche le bouton"""
+        """Show the button"""
         if self.souris_on_button(bloc):
             pygame.draw.rect(self.screen,self.color_blue,bloc)
         else:
             pygame.draw.rect(self.screen,self.color_black,bloc)
 
     def souris_on_button(self,bloc):
-        """Verifie si la souris se trouve sur le boutton"""
+        """Check if the mouse is on button"""
         return bloc[0]<pygame.mouse.get_pos()[0]<bloc[0]+bloc[2] and bloc[1]<pygame.mouse.get_pos()[1]<bloc[1]+bloc[3]
 
     def charge_skin(self):
-        """Charge le nouveau joueur et cache l'ancien"""
+        """Load the new player and hide the old"""
         self.skin = pygame.image.load("assets/sprite/player"+str(self.num_skin)+".png").convert_alpha()
         self.sprite_player = pygame.transform.scale(self.skin,(self.screen.get_height()/2,self.screen.get_height()/2))
         self.screen.fill((107,114,142))
 
     def run(self):
-        """boucle de la page d'accueil,renvoie le niveau
-        du jeu souhaité ou la fermeture du jeu"""
+        """The loop of the game"""
         if pygame.mouse.get_visible() == False:
             pygame.mouse.set_visible(True)
         self.screen.fill((107, 114, 142))
@@ -313,7 +309,7 @@ class Home():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:#touche entrer
+                    if event.key == pygame.K_ESCAPE:
                         Transition(self.screen,self.song)
                         choose_game = 0
                         self.running = False
@@ -345,9 +341,9 @@ class Home():
                             self.running = False  
 
             if self.running:
-                """blocs non cliquables"""
+                """non clickable button"""
                 pygame.draw.rect(self.screen,self.color_black,[0,0,self.screen.get_width(),self.screen.get_height()/5])
-                """blocs cliquables"""
+                """clickable button"""
                 self.button(self.rect_facile)
                 self.button(self.rect_normal)
                 self.button(self.rect_difficile)
@@ -355,7 +351,7 @@ class Home():
                 self.button(self.rect_skin)
                 self.button(self.rect_quit)
 
-                """ecriture bienvenue"""
+                """Welcome write"""
                 self.screen.blit(self.welcome,(self.screen.get_width()/5,self.screen.get_height()/12))
                 self.screen.blit(self.render_facile,(self.rect_facile[0],self.rect_facile[1]))
                 self.screen.blit(self.render_normal,(self.rect_normal[0],self.rect_normal[1]))
@@ -364,14 +360,14 @@ class Home():
                 self.screen.blit(self.render_skin,(self.rect_skin[0],self.rect_skin[1]))
                 self.screen.blit(self.render_quit,(self.rect_quit[0]+int(self.screen.get_width()*0.5/10)/4,self.rect_quit[1]+int(self.screen.get_width()*0.5/10)/8))
 
-                """actualisation des élements"""
+                """update the element"""
                 self.screen.blit(self.sprite_player,(self.screen.get_width()/2,self.screen.get_height()/5))
                 pygame.display.flip()    
         return choose_game,self.num_skin
 
 class INITIAL():
     def __init__(self,screen,donnee):
-        """Il s'agit de l'effet visuel lors du demarage du jeu"""
+        """The effect of the beginning of the game"""
         pygame.mixer.music.load("assets/music/intro/studio-quaerite.ogg")#futuristic-logo-3-versions.ogg / rock-cinematic.ogg / studio-quaerite.ogg
         pygame.mixer.music.play()
         font = pygame.font.Font("assets/font/dialog_font.ttf",donnee.taille_text)
@@ -392,7 +388,7 @@ class INITIAL():
 
 class Transition():
     def __init__(self,screen,song) -> None:    
-        """Petite transition lorsque lors d'un clique d'un bouton par exemple"""
+        """Little transition when a click of the player"""
         song.play("radio",root="assets/music/bruitage/",loops=1)
         if pygame.mouse.get_visible():
             pygame.mouse.set_visible(False)

@@ -23,7 +23,7 @@ class Donnee():
         self.defaite_difficile = int
 
     def coupe_virg(self,chaine):
-        """decoupe une chaine de caractère en 2 à la virgule"""
+        """Split the caracter string in 2 with a comma"""
         statu = True
         chaine1 = ""
         chaine2 = ""
@@ -37,7 +37,7 @@ class Donnee():
         return((int(chaine1),int(chaine2)))
 
     def recuperer(self):
-        """recupere les données des succes"""
+        """Get the data of the successes game"""
         fichier = open("data/succes.txt","r")
         nbr = 0
         for line in fichier:
@@ -50,8 +50,7 @@ class Donnee():
                 self.victoire_difficile,self.defaite_difficile = self.coupe_virg(line[0:-1])
 
     def sauvegarder(self):
-        """enregister les succes dans un fichier
-        les données enregistées sont les victoires des differents mode de jeu"""
+        """Save the data of the victory"""
         fichier = open("data/succes.txt","w")
         fichier.write(str(self.victoire_easy)+","+str(self.defaite_easy)+"\n")
         fichier.write(str(self.victoire_normal)+","+str(self.defaite_normal)+"\n")
@@ -59,7 +58,7 @@ class Donnee():
         fichier.close()
 
     def delete(self):
-        """Suprime les succes"""
+        """Del the data"""
         os.remove("data/succes.txt")
         fichier = open("data/succes.txt","w")
         fichier.write("0,0\n")
