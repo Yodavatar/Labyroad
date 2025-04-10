@@ -27,7 +27,7 @@ It was created to fun and is primarily targeted<br>
 to people who learn python.<br>
 
 
-![image](https://github.com/user-attachments/assets/637af960-579c-4f0c-a0bd-20650975a2d4)
+![image](https://github.com/user-attachments/assets/637af960-579c-4f0c-a0bd-20650975a2d4=400x500)
 
 
 ## Features
