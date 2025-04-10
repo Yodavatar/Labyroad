@@ -1,5 +1,6 @@
 # Labyroad
-This project was **finished**. __**Version 1.0**__<br>
+This project was **finished**.<br>
+__**Version 1.0**__<br>
 [![wakatime](https://wakatime.com/badge/user/17a8cdf0-54fb-45e9-92bc-ada49bd926d7/project/da0b05c1-f32a-4774-86a8-116e2f576c21.svg)](https://wakatime.com/badge/user/17a8cdf0-54fb-45e9-92bc-ada49bd926d7/project/da0b05c1-f32a-4774-86a8-116e2f576c21)
 
 ![Gif finish project](https://media.tenor.com/w7D79HmiUKwAAAAM/rolando-check.gif)
