@@ -29,8 +29,6 @@ to people who learn python.<br>
 
 <img src="https://github.com/user-attachments/assets/637af960-579c-4f0c-a0bd-20650975a2d4" width="600" height="300"/>
 
-![image](=400x500)
-
 
 ## Features
 
