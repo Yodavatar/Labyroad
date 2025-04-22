@@ -85,7 +85,7 @@ __**If you want contribute to this project.**__
 
 
 This project is licensed under the Creative Commons.<br>
-See the [Creative Commons](license) file for details.<br>
+See the [Creative Commons](LICENSE) file for details.<br>
 
 
 ## Contact
