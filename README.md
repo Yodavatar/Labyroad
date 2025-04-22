@@ -41,7 +41,7 @@ __**3 - Didacticiel**__
 __**4 - Assets**__
 
 All assets in his git is free copyright.<br>
-You can see the authors [here](https://github.com/Yodavatar/Labyroad/blob/main/author.txt).<br>
+You can see the authors [here](https://github.com/Yodavatar/Labyroad/blob/main/authors.txt).<br>
 
 ## Installation
 
